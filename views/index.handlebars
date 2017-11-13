@@ -1,0 +1,37 @@
+{{#each this}}
+
+<div id={{this._id}} class="article-card card col-12 my-3">
+  <div class="card-block">
+    <h4 class="article-title card-title"> {{this.title}} </h4>
+    <h6 class="card-subtitle mb-2 text-muted"> {{this.link}} </h6>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	<button type="button" data-article-id={{this._id}} class="d-inline-block save-article-btn btn btn-info col-2">Save Article</button>
+	<button type="button" data-article-id={{this._id}} class="d-inline-block view-comments-btn btn btn-warning col-2">View Comments</button>
+  </div>
+</div>	
+
+{{#each this.comments}}
+<div class="comment-card card col-12 my-3 d-none">
+  <div class="card-block">
+    <h6 class="card-subtitle mb-2 text-muted">Commenter Name</h6>
+    <p class="card-text">{{this.body}}</p>
+  </div>
+</div>
+{{/each}}
+
+<div class="comment-form-card card d-none">
+	<form>
+		<div class="form-group">
+		    <label for="name-input">Name</label>
+		    <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Enter your name">
+		</div>
+		<div class="form-group">
+		    <label for="exampleTextarea">Comment</label>
+		    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+		    	<button type="submit" class="btn btn-primary">Add Comment</button>
+
+	  	</div>
+	</form>
+</div>
+
+{{/each}}
