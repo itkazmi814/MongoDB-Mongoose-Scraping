@@ -1,6 +1,6 @@
 {{#each this}}
 
-<div id={{this._id}} class="article-card card col-12 my-3">
+<div class="article-card card col-12 my-3">
   <div class="card-block">
     <h4 class="article-title card-title"> {{this.title}} </h4>
     <h6 class="card-subtitle mb-2 text-muted"> {{this.link}} </h6>
@@ -10,28 +10,29 @@
   </div>
 </div>	
 
-{{#each this.comments}}
-<div class="comment-card card col-12 my-3 d-none">
-  <div class="card-block">
-    <h6 class="card-subtitle mb-2 text-muted">Commenter Name</h6>
-    <p class="card-text">{{this.body}}</p>
-  </div>
-</div>
-{{/each}}
+<div id="comments-{{this._id}}" data-visible="no" class="comment-card card col-12 my-3 hidden">
+	{{#each this.comments}}
+	  <div class="card-block">
+  	  <h6 class="card-subtitle mb-2 text-muted">Commenter Name</h6>
+    	<p class="card-text">{{this.body}}</p>
+  	</div>
+	{{/each}}
+	<button id="create-comment-{{this._id}}" type="button" data-article-id={{this._id}} class="create-comment-btn btn btn-primary my-1 col-2">New Comment</button>
+	<div id="form-{{this._id}}" data-visible="no" class="comment-form-card card hidden">
+		<form>
+			<div class="form-group">
+			    <label for="name-input">Name</label>
+			    <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Enter your name">
+			</div>
+			<div class="form-group">
+			    <label for="exampleTextarea">Comment</label>
+			    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+			    	<button type="submit" class="submit-comment-btn btn btn-primary">Add Comment</button>
 
-<div class="comment-form-card card d-none">
-	<form>
-		<div class="form-group">
-		    <label for="name-input">Name</label>
-		    <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Enter your name">
-		</div>
-		<div class="form-group">
-		    <label for="exampleTextarea">Comment</label>
-		    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
-		    	<button type="submit" class="btn btn-primary">Add Comment</button>
-
-	  	</div>
-	</form>
+		  	</div>
+		</form>
+	</div>
 </div>
+
 
 {{/each}}
