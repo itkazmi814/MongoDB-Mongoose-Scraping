@@ -7,4 +7,9 @@
 	display: none;
 }
 
-
+.article-title a {
+	color: black;
+}
+.article-title a:hover {
+	color: gray;
+}

@@ -31,8 +31,8 @@ $(".view-comments-btn").on("click", function(event) {
 		$(`#create-comment-${articleId}`).show();
 		$(`#comments-${articleId}`).slideDown("fast");
 		$(`#comments-${articleId}`).attr("data-visible", "yes");
-		//If comment are displayed, hide them and the create comment form
 	} else {
+		//If comment are displayed, hide them and the create comment form
 		$(`#comments-${articleId}`).slideUp("fast");
 		$(`#comments-${articleId}`).attr("data-visible", "no");
 	}
@@ -46,9 +46,6 @@ $(".submit-comment-btn").on("click", function(event) {
 	$.post(`/api/articles/${articleId}/comments/new`, {
 		body: commentBody
 	}).then(data => {
-		console.log("comment data?", data);
-		console.log(data.comments);
-		console.log(data.comments._id);
 		$(`#comment-body-${articleId}`).empty();
 		const tempComment = `<div class="card-body p-2">
   			<div data-comment-id={{this._id}} class="d-inline-block delete-comment-btn btn btn-alert"><i class="fa fa-trash-o" aria-hidden="true"></i></div>

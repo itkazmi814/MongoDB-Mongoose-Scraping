@@ -3,9 +3,9 @@
 
 <div class="article-card card col-12 my-3">
   <div class="card-body">
-    <h4 class="article-title card-title"> {{this.title}} </h4>
-    <h6 class="card-subtitle mb-2 text-muted"> {{this.link}} </h6>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <h4 class="article-title card-title"> <a href={{this.link}}>{{this.title}} </a></h4>
+    <h6 class="card-subtitle mb-2 text-muted">   </h6>
+    <p class="card-text"> </p>
 	<button type="button" data-article-id={{this._id}}  data-saved={{this.isSaved}} class="d-inline-block save-article-btn btn btn-info mb-2">
 		{{#if this.isSaved}}
 			<i class="fa fa-bookmark" aria-hidden="true"></i>

@@ -13,7 +13,6 @@ module.exports = function(app, axios, cheerio, db) {
 				//grab the specific data we are looking for
 				$("#siteTable p.title").each((i, element) => {
 					var article = {};
-
 					article.title = $(element)
 						.children("a")
 						.text();
@@ -22,18 +21,10 @@ module.exports = function(app, axios, cheerio, db) {
 						.children("a")
 						.attr("href");
 
-					if (article.link[0] === "/") {
-						article.link = "https://www.reddit.com" + article.link;
-					}
-
-					//check to see if the article is already in the db
-					//this code isn't necessary because of unique:true in the model, but i'm keeping it because its cool
 					db.Article.create(article);
 				});
 			})
 			.then(() => {
-				console.log("Number of articles scraped", counter);
-				console.log("Scraped articles inserted into db");
 				res.redirect("/api/articles");
 			})
 			.catch(error => console.log(error));
@@ -49,8 +40,8 @@ module.exports = function(app, axios, cheerio, db) {
 			.find({})
 			.populate("comments")
 			.sort({ _id: -1 })
-			.then(articles => {
-				res.render("index", articles);
+			.then(allArticles => {
+				res.render("index", allArticles);
 			});
 	});
 
@@ -58,10 +49,10 @@ module.exports = function(app, axios, cheerio, db) {
 	app.get("/api/articles/saved", (req, res) => {
 		db.Article
 			.find({ isSaved: true })
-			.sort({ _id: -1 })
 			.populate("comments")
-			.then(articles => {
-				res.render("index", articles);
+			.sort({ _id: -1 })
+			.then(allSaved => {
+				res.render("index", allSaved);
 			});
 	});
 
@@ -121,17 +112,17 @@ module.exports = function(app, axios, cheerio, db) {
 
 	//POST route - delete a comment on an article
 	app.post("/api/comments/:id/delete", (req, res) => {
-		db.Comments
-			.remove({ _id: req.params.id })
-			.then(() => {
-				return db.Article.update(
+		db.Comments.remove({ _id: req.params.id }).then(() => {
+			db.Article
+				.update(
 					{ comments: req.params.id },
 					//removes a specific index of the comments array where id matches
 					{ $pullAll: { comments: [{ _id: req.params.id }] } }
-				);
-			})
-			.then(data => {
-				res.json(data);
-			});
+				)
+				//UN NEST THIS SHIT
+				.then(data => {
+					res.json(data);
+				});
+		});
 	});
 };

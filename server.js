@@ -6,7 +6,7 @@ var cheerio = require("cheerio");
 var path = require("path");
 
 var db = require("./models");
-var PORT = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 
 var app = express();
 
@@ -33,6 +33,6 @@ mongoose.connect("mongodb://localhost/redditScraper", {
 });
 
 // Start the server
-app.listen(PORT, function() {
-	console.log("App running on port " + PORT + "!");
+app.listen(port, function() {
+	console.log("App running on port " + port + "!");
 });
