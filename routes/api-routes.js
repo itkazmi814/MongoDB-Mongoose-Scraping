@@ -4,31 +4,30 @@ module.exports = function(app, axios, cheerio, db) {
 	//GET route - scrapes reddit.com/r/popular
 	app.post("/api/articles/scrape", (req, res) => {
 		var counter = 0;
-		console.log("in the scrape function");
 		//grab the html body of the request using saxios
-		// axios
-		// 	.get("https://www.reddit.com/r/popular/")
-		// 	.then(response => {
-		// 		//load response into cheerio
-		// 		var $ = cheerio.load(response.data);
-		// 		//grab the specific data we are looking for
-		// 		$("#siteTable p.title").each((i, element) => {
-		// 			var article = {};
-		// 			article.title = $(element)
-		// 				.children("a")
-		// 				.text();
+		axios
+			.get("https://www.reddit.com/r/popular/")
+			.then(response => {
+				//load response into cheerio
+				var $ = cheerio.load(response.data);
+				//grab the specific data we are looking for
+				$("#siteTable p.title").each((i, element) => {
+					var article = {};
+					article.title = $(element)
+						.children("a")
+						.text();
 
-		// 			article.link = $(element)
-		// 				.children("a")
-		// 				.attr("href");
+					article.link = $(element)
+						.children("a")
+						.attr("href");
 
-		// 			db.Article.create(article);
-		// 		});
-		// 	})
-		// 	.then(() => {
-		// 		res.redirect("/api/articles");
-		// 	})
-		// 	.catch(error => console.log(error));
+					db.Article.create(article);
+				});
+			})
+			.then(() => {
+				res.redirect("/api/articles");
+			})
+			.catch(error => console.log(error));
 	});
 
 	app.get("/", (req, res) => {
