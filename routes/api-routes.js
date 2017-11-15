@@ -4,6 +4,7 @@ module.exports = function(app, axios, cheerio, db) {
 	//GET route - scrapes reddit.com/r/popular
 	app.post("/api/articles/scrape", (req, res) => {
 		var counter = 0;
+		console.log("in the scrape function");
 		//grab the html body of the request using saxios
 		// axios
 		// 	.get("https://www.reddit.com/r/popular/")
