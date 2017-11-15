@@ -50,8 +50,6 @@ module.exports = function(app, axios, cheerio, db) {
 			.populate("comments")
 			.sort({ _id: -1 })
 			.then(articles => {
-				console.log("Displaying all articles");
-				// console.log(allArticles);
 				res.render("index", articles);
 			});
 	});
@@ -63,15 +61,12 @@ module.exports = function(app, axios, cheerio, db) {
 			.sort({ _id: -1 })
 			.populate("comments")
 			.then(articles => {
-				console.log("Displaying saved articles");
-				// console.log(allArticles);
 				res.render("index", articles);
 			});
 	});
 
 	//POST route - save a specific article
 	app.post("/api/articles/:id/save", (req, res) => {
-		console.log("Saving article ", req.params.id);
 		db.Article
 			.findOneAndUpdate(
 				{ _id: req.params.id },
@@ -79,15 +74,12 @@ module.exports = function(app, axios, cheerio, db) {
 				{ new: true }
 			)
 			.then(data => {
-				console.log("Article that is now saved:");
-				console.log(data);
 				res.json(data);
 			});
 	});
 
 	//UPDATE route - unsave an article
 	app.post("/api/articles/:id/unsave", (req, res) => {
-		console.log("Unsaving article ", req.params.id);
 		db.Article
 			.findOneAndUpdate(
 				{ _id: req.params.id },
@@ -95,37 +87,27 @@ module.exports = function(app, axios, cheerio, db) {
 				{ new: true }
 			)
 			.then(data => {
-				console.log("Article that is now unsaved:");
-				console.log(data);
 				res.json(data);
 			});
 	});
 
 	//GET route - display a specific article's comments
 	app.get("/api/articles/:id", (req, res) => {
-		console.log("Getting article info and comments");
-		console.log("id", req.params.id);
-
 		db.Article
 			.findOne({
 				_id: req.params.id
 			})
 			.populate("comments")
 			.then(fullArticleInfo => {
-				console.log("Displaying full article info");
-				console.log(fullArticleInfo);
 				res.json(fullArticleInfo);
 			});
 	});
 
 	//POST route - add new comment to an article
 	app.post("/api/articles/:id/comments/new", (req, res) => {
-		console.log("New comment", req.body);
 		db.Comments
 			.create(req.body)
 			.then(newComment => {
-				console.log("Result of new comment creation:");
-				console.log(newComment);
 				return db.Article.findOneAndUpdate(
 					{ _id: req.params.id },
 					{ $push: { comments: newComment._id } },
@@ -133,28 +115,23 @@ module.exports = function(app, axios, cheerio, db) {
 				);
 			})
 			.then(data => {
-				console.log("Article with added comment:");
-				console.log(data);
 				res.json(data);
 			});
 	});
 
 	//POST route - delete a comment on an article
 	app.post("/api/comments/:id/delete", (req, res) => {
-		console.log("Removing comment", req.params.id);
-		db.Comments.remove({ _id: req.params.id }).then(() => {
-			db.Article
-				.update(
+		db.Comments
+			.remove({ _id: req.params.id })
+			.then(() => {
+				return db.Article.update(
 					{ comments: req.params.id },
 					//removes a specific index of the comments array where id matches
 					{ $pullAll: { comments: [{ _id: req.params.id }] } }
-				)
-				//UN NEST THIS SHIT
-				.then(data => {
-					console.log("Removed comment from article");
-					console.log(data);
-					res.json(data);
-				});
-		});
+				);
+			})
+			.then(data => {
+				res.json(data);
+			});
 	});
 };
