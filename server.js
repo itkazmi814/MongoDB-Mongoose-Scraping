@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
+var path = require("path");
 
 var db = require("./models");
 var PORT = process.env.PORT || 3000;
@@ -13,7 +14,7 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // Use express.static to serve the public folder as a static directory
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Set Handlebars.
 var exphbs = require("express-handlebars");

@@ -49,10 +49,10 @@ module.exports = function(app, axios, cheerio, db) {
 			.find({})
 			.populate("comments")
 			.sort({ _id: -1 })
-			.then(allArticles => {
+			.then(articles => {
 				console.log("Displaying all articles");
 				// console.log(allArticles);
-				res.render("index", allArticles);
+				res.render("index", articles);
 			});
 	});
 
@@ -62,10 +62,10 @@ module.exports = function(app, axios, cheerio, db) {
 			.find({ isSaved: true })
 			.sort({ _id: -1 })
 			.populate("comments")
-			.then(allSaved => {
+			.then(articles => {
 				console.log("Displaying saved articles");
 				// console.log(allArticles);
-				res.render("index", allSaved);
+				res.render("index", articles);
 			});
 	});
 
