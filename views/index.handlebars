@@ -5,12 +5,18 @@
     <h4 class="article-title card-title"> {{this.title}} </h4>
     <h6 class="card-subtitle mb-2 text-muted"> {{this.link}} </h6>
     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	<button type="button" data-article-id={{this._id}} class="d-inline-block save-article-btn btn btn-info col-2">Save Article</button>
-	<button type="button" data-article-id={{this._id}} class="d-inline-block view-comments-btn btn btn-warning col-2">
-		{{#if this.comments.length}}
-		View Comments | {{this.comments.length}} 
+	<button type="button" data-article-id={{this._id}}  data-saved={{this.isSaved}} class="d-inline-block save-article-btn btn btn-info mb-2">
+		{{#if this.isSaved}}
+			<i class="fa fa-bookmark" aria-hidden="true"></i>
 		{{else}}
-		Add Comment
+			<i class="fa fa-bookmark-o" aria-hidden="true"></i>
+		{{/if}}
+	</button>
+	<button type="button" data-article-id={{this._id}} class="d-inline-block view-comments-btn btn btn-warning mb-2">
+		{{#if this.comments.length}}
+			<i class="fa fa-comments-o" aria-hidden="true"></i> | {{this.comments.length}} 
+		{{else}}
+			<i class="fa fa-pencil" aria-hidden="true"></i>
 		{{/if}}
 	</button>
   </div>
@@ -19,27 +25,22 @@
 <div id="comments-{{this._id}}" data-visible="no" class="comment-card card col-12 my-3 hidden">
 	<div id="comment-box-{{this._id}}">
 		{{#each this.comments}}
-	  	<div class="card-block">
-  	  	<h6 class="card-subtitle mb-2 text-muted">Commenter Name</h6>
-    		<p class="card-text">{{this.body}}</p>
+	  	<div id="comment-details-{{this._id}}"class="card-block">
+  			<div data-comment-id={{this._id}} class="d-inline-block delete-comment-btn btn btn-alert"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+  	  		<div class="d-inline-block">
+  	  			<h6 class="card-subtitle my-3 text-muted ">{{this.body}}</h6>
+    		</div>
   		</div>
-  		<button type="button" data-article-id={{this._id}} class="d-inline-block delete-comment-btn btn btn-alert"> X </button>
 		{{/each}}
 	</div>
 	<div id="form-{{this._id}}" data-visible="no" class="comment-form-card card">
 		<form>
 			<div class="form-group">
-			    <label for="name-input">Name</label>
-			    <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Enter your name">
-			</div>
-			<div class="form-group">
-		    <label for="exampleTextarea">Comment</label>
-		    <textarea class="form-control" id="comment-body-{{this._id}}" rows="3"></textarea>
+		    <textarea class="form-control" id="comment-body-{{this._id}}" rows="3" placeholder="Say something!"></textarea>
 		    	<button type="submit" data-article-id={{this._id}} class="submit-comment-btn btn btn-primary">Add Comment</button>
 		  </div>
 		</form>
 	</div>
 </div>
-
 
 {{/each}}

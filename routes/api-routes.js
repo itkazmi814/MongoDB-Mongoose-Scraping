@@ -2,7 +2,7 @@ module.exports = function(app, axios, cheerio, db) {
 	console.log("Imported api routes");
 
 	//GET route - scrapes reddit.com/r/popular
-	app.get("/api/articles/scrape", (req, res) => {
+	app.post("/api/articles/scrape", (req, res) => {
 		var counter = 0;
 		//grab the html body of the request using saxios
 		axios
@@ -27,28 +27,8 @@ module.exports = function(app, axios, cheerio, db) {
 					}
 
 					//check to see if the article is already in the db
-					db.Article
-						.findOne({
-							title: article.title,
-							link: article.link
-						})
-						.then(data => {
-							var createArticleFlag;
-							if (data) {
-								console.log("createArticleFlag = false");
-								return (createArticleFlag = false);
-							} else {
-								console.log("createArticleFlag = true");
-								return (createArticleFlag = true);
-							}
-						})
-						.then(createArticleFlag => {
-							if (createArticleFlag) {
-								console.log("Creating article");
-								counter++;
-								db.Article.create(article);
-							}
-						});
+					//this code isn't necessary because of unique:true in the model, but i'm keeping it because its cool
+					db.Article.create(article);
 				});
 			})
 			.then(() => {
@@ -68,10 +48,24 @@ module.exports = function(app, axios, cheerio, db) {
 		db.Article
 			.find({})
 			.populate("comments")
+			.sort({ _id: -1 })
 			.then(allArticles => {
 				console.log("Displaying all articles");
-				console.log(allArticles);
+				// console.log(allArticles);
 				res.render("index", allArticles);
+			});
+	});
+
+	//GET route - gets all saved articles from db
+	app.get("/api/articles/saved", (req, res) => {
+		db.Article
+			.find({ isSaved: true })
+			.sort({ _id: -1 })
+			.populate("comments")
+			.then(allSaved => {
+				console.log("Displaying saved articles");
+				// console.log(allArticles);
+				res.render("index", allSaved);
 			});
 	});
 
